@@ -1,8 +1,8 @@
 {
   "name": "Drzix Pediatrics",
   "short_name": "Drzix",
-  "start_url": "/",
-  "scope": "/",
+  "start_url": "./",
+  "scope": "./",
   "display": "standalone",
   "background_color": "#f4f8ff",
   "theme_color": "#1677ff",
