@@ -1,0 +1,190 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Drzix Pediatrics</title>
+    <meta name="theme-color" content="#1677ff" />
+    <meta name="description" content="Offline-first pediatric clinical support for Indian doctors." />
+    <link rel="manifest" href="manifest.json" />
+    <link rel="icon" href="assets/icon.svg" type="image/svg+xml" />
+    <link rel="stylesheet" href="css/app.css" />
+  </head>
+  <body>
+    <div class="app-shell">
+      <header class="topbar">
+        <div>
+          <p class="eyebrow">Drzix Pediatrics</p>
+          <h1>Apple-style pediatric support</h1>
+        </div>
+        <button class="icon-button" id="settingsButton" type="button" aria-label="Open settings">
+          <span aria-hidden="true">⚙</span>
+        </button>
+      </header>
+
+      <main class="app-main">
+        <section class="hero-card card">
+          <div class="hero-copy">
+            <span class="pill">Offline ready</span>
+            <h2>Search a drug, estimate weight, and calculate a safe pediatric dose.</h2>
+            <p>
+              Built for quick bedside use with age checks, strength selection, and prescription-ready output.
+            </p>
+          </div>
+          <label class="search-box" for="searchInput">
+            <span>Search drug, symptom, or category</span>
+            <input id="searchInput" type="search" placeholder="Paracetamol, fever, antibiotic..." autocomplete="off" />
+          </label>
+        </section>
+
+        <section class="screen" data-screen="home">
+          <div class="card section-card">
+            <div class="section-header">
+              <div>
+                <p class="section-label">Quick actions</p>
+                <h3>Start where the doctor is</h3>
+              </div>
+            </div>
+            <div class="quick-grid">
+              <button class="quick-action active" data-action="drug-dose" type="button">
+                <strong>Drug Dose</strong>
+                <span>Oral, syrup, tablet</span>
+              </button>
+              <button class="quick-action" data-action="injectables" type="button">
+                <strong>Injectables</strong>
+                <span>IV / IM doses</span>
+              </button>
+              <button class="quick-action" data-action="fluids" type="button">
+                <strong>IV Fluids</strong>
+                <span>Maintenance & bolus</span>
+              </button>
+              <button class="quick-action" data-action="growth" type="button">
+                <strong>Growth</strong>
+                <span>WHO-based estimates</span>
+              </button>
+            </div>
+          </div>
+
+          <div class="card section-card">
+            <div class="section-header">
+              <div>
+                <p class="section-label">Recent drugs</p>
+                <h3>Frequently used</h3>
+              </div>
+            </div>
+            <div class="chip-row" id="recentChips"></div>
+          </div>
+        </section>
+
+        <section class="screen active" data-screen="search">
+          <div class="card section-card">
+            <div class="section-header">
+              <div>
+                <p class="section-label">Search results</p>
+                <h3>Drugs and pediatric topics</h3>
+              </div>
+            </div>
+            <div id="searchSummary" class="summary muted">Search to see matches.</div>
+            <div id="searchResults" class="result-list"></div>
+          </div>
+        </section>
+
+        <section class="screen" data-screen="drug-dose">
+          <div class="card section-card">
+            <div class="section-header">
+              <div>
+                <p class="section-label">Selected drug</p>
+                <h3 id="drugName">Select a medicine</h3>
+              </div>
+              <span class="status-badge" id="drugStatus">Verified</span>
+            </div>
+
+            <div id="drugIndications" class="chip-row"></div>
+
+            <div class="input-grid">
+              <label>
+                <span>Years</span>
+                <input id="yearsInput" type="number" min="0" step="1" inputmode="numeric" placeholder="2" />
+              </label>
+              <label>
+                <span>Months</span>
+                <input id="monthsInput" type="number" min="0" max="11" step="1" inputmode="numeric" placeholder="6" />
+              </label>
+            </div>
+
+            <label class="checkbox-row">
+              <input id="actualWeightToggle" type="checkbox" />
+              <span>I know the actual weight</span>
+            </label>
+
+            <div id="actualWeightBlock" class="input-grid hidden">
+              <label>
+                <span>Weight in kg</span>
+                <input id="actualWeightInput" type="number" min="0" step="0.1" inputmode="decimal" placeholder="12.5" />
+              </label>
+            </div>
+
+            <div class="info-panel" id="estimatedWeightPanel"></div>
+
+            <div class="strength-picker" id="strengthPicker"></div>
+          </div>
+
+          <div class="card section-card result-card">
+            <div class="section-header">
+              <div>
+                <p class="section-label">Dose result</p>
+                <h3 id="doseTitle">Waiting for inputs</h3>
+              </div>
+            </div>
+            <div id="doseOutput" class="dose-output"></div>
+            <div id="safetyOutput" class="warning-stack"></div>
+          </div>
+        </section>
+
+        <section class="screen" data-screen="injectables">
+          <div class="card section-card">
+            <p class="section-label">Injectables</p>
+            <h3>Coming next in Milestone 2</h3>
+            <p class="muted">The foundation is ready for injectable dose logic and vial-based calculations.</p>
+          </div>
+        </section>
+
+        <section class="screen" data-screen="fluids">
+          <div class="card section-card">
+            <p class="section-label">IV fluids</p>
+            <h3>Coming next in Milestone 2</h3>
+            <p class="muted">Maintenance, bolus, and fluid correction calculators will plug into the same engine.</p>
+          </div>
+        </section>
+
+        <section class="screen" data-screen="growth">
+          <div class="card section-card">
+            <p class="section-label">Growth</p>
+            <h3>WHO-based weight estimation</h3>
+            <p class="muted">The current build includes starter growth values for practical dose estimation.</p>
+          </div>
+        </section>
+
+        <section class="screen" data-screen="settings">
+          <div class="card section-card">
+            <p class="section-label">Settings</p>
+            <h3>Project preferences</h3>
+            <p class="muted">Offline-first, Apple-style UI, and pediatric-only scope are locked in for this build.</p>
+          </div>
+        </section>
+      </main>
+
+      <nav class="bottom-nav" aria-label="Primary">
+        <button class="nav-item active" data-screen-target="home" type="button">Home</button>
+        <button class="nav-item" data-screen-target="search" type="button">Search</button>
+        <button class="nav-item" data-screen-target="drug-dose" type="button">Drug Dose</button>
+        <button class="nav-item" data-screen-target="growth" type="button">Growth</button>
+        <button class="nav-item" data-screen-target="settings" type="button">Settings</button>
+      </nav>
+    </div>
+
+    <script src="js/data.js"></script>
+    <script src="js/engine.js"></script>
+    <script src="js/app.js"></script>
+  </body>
+</html>
