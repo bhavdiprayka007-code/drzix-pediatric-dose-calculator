@@ -189,6 +189,19 @@ function getInjectableDrugs() {
   });
 }
 
+function applyStatusBadgeStyle(element, status) {
+  const normalized = normalizeText(status);
+  element.className = "status-badge";
+
+  if (normalized.includes("review")) {
+    element.classList.add("warning");
+  } else if (normalized.includes("need")) {
+    element.classList.add("warning");
+  } else {
+    element.classList.add("success");
+  }
+}
+
 function renderRecentChips() {
   elements.recentChips.innerHTML = window.DRZIX_DATA.recent
     .map((item) => `<span class="chip"><button type="button" data-drug-select="${item}">${item}</button></span>`)
@@ -270,7 +283,7 @@ function renderStrengthButtons(container, strengths, selectedIndex, onSelect) {
   `;
 
   container.querySelectorAll("[data-strength-index]").forEach((button) => {
-    button.addEventListener("click", () => onSelect(Number(button.dataset.strengthIndex)));
+    button.addEventListener("click", () => onSelect(Number(button.dataset.strength-index)));
   });
 }
 
@@ -280,6 +293,7 @@ function setSelectedDrug(drugId, shouldUpdate = true) {
   state.selectedStrengthIndex = Math.min(state.selectedStrengthIndex, drug.strengths.length - 1);
   elements.drugName.textContent = drug.name;
   elements.drugStatus.textContent = drug.status;
+  applyStatusBadgeStyle(elements.drugStatus, drug.status);
   elements.drugIndications.innerHTML = drug.indications.map((item) => `<span class="chip">${item}</span>`).join("");
 
   renderStrengthButtons(elements.strengthPicker, drug.strengths, state.selectedStrengthIndex, (index) => {
@@ -299,6 +313,7 @@ function setSelectedInjectable(drugId, shouldUpdate = true) {
   state.selectedInjectableStrengthIndex = Math.min(state.selectedInjectableStrengthIndex, drug.strengths.length - 1);
   elements.injectableName.textContent = drug.name;
   elements.injectableStatus.textContent = drug.status;
+  applyStatusBadgeStyle(elements.injectableStatus, drug.status);
   elements.injectableIndications.innerHTML = drug.indications.map((item) => `<span class="chip">${item}</span>`).join("");
 
   renderSelectionButtons(
