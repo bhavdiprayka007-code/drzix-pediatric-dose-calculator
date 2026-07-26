@@ -37,6 +37,7 @@ function cacheElements() {
   elements.navItems = Array.from(document.querySelectorAll(".nav-item"));
   elements.screens = Array.from(document.querySelectorAll(".screen"));
   elements.quickActions = Array.from(document.querySelectorAll(".quick-action"));
+  elements.settingsButton = document.getElementById("settingsButton");
 }
 
 function bindEvents() {
@@ -52,6 +53,8 @@ function bindEvents() {
     updateAll();
   });
   elements.actualWeightInput.addEventListener("input", updateAll);
+
+  elements.settingsButton.addEventListener("click", () => activateScreen("settings"));
 
   elements.navItems.forEach((button) => {
     button.addEventListener("click", () => activateScreen(button.dataset.screenTarget));
