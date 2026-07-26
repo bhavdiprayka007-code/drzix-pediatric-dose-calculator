@@ -98,10 +98,51 @@ function getStrengthReference(strength) {
     return {
       concentrationMg,
       concentrationMl,
+      form: strength.form || "",
+      label: strength.label || "",
     };
   }
 
   return null;
+}
+
+function pickAgeSpecificAlternative(drug, ageMonths) {
+  const rules = drug?.age?.alternativesByAge || drug?.alternativesByAge || [];
+  if (!Number.isFinite(ageMonths)) {
+    return null;
+  }
+
+  const rule = rules.find((entry) => {
+    const minMonths = Number.isFinite(entry.minMonths) ? entry.minMonths : 0;
+    const maxMonths = Number.isFinite(entry.maxMonths) ? entry.maxMonths : Infinity;
+    return ageMonths >= minMonths && ageMonths <= maxMonths;
+  });
+
+  if (!rule) {
+    return null;
+  }
+
+  return {
+    name: rule.name || rule.drug || "Check local protocol",
+    note: rule.note || rule.reason || "",
+  };
+}
+
+function formatTabletOrLiquidDose(selectedStrength, doseMg) {
+  const strengthReference = getStrengthReference(selectedStrength);
+  if (!strengthReference) {
+    return null;
+  }
+
+  const strengthForm = normalizeText(strengthReference.form);
+  if (strengthForm.includes("tablet") || strengthForm.includes("capsule")) {
+    const count = doseMg / strengthReference.concentrationMg;
+    const unit = strengthForm.includes("capsule") ? "capsules" : "tablets";
+    return `${formatNumber(count, 2)} ${unit}`;
+  }
+
+  const volumeMl = (doseMg / strengthReference.concentrationMg) * strengthReference.concentrationMl;
+  return `${formatNumber(volumeMl, 2)} mL`;
 }
 
 function calculateDrugPlan(drug, options = {}) {
@@ -116,12 +157,15 @@ function calculateDrugPlan(drug, options = {}) {
   const minimumAge = Number.isFinite(drug.age?.minMonths) ? drug.age.minMonths : null;
 
   if (minimumAge !== null && ageMonths !== null && ageMonths < minimumAge) {
+    const ageAlternative = pickAgeSpecificAlternative(drug, ageMonths);
+    const fallbackAlternative = (drug.alternatives && drug.alternatives[0]) || "Check local protocol";
     return {
       blocked: true,
       tone: "danger",
       title: "Not appropriate for this age group",
       message: `${drug.name} is below the starter minimum age in this build.`,
-      alternative: (drug.alternatives && drug.alternatives[0]) || "Check local protocol",
+      alternative: ageAlternative?.name || fallbackAlternative,
+      alternativeNote: ageAlternative?.note || "",
     };
   }
 
@@ -132,6 +176,7 @@ function calculateDrugPlan(drug, options = {}) {
       title: "Need a weight first",
       message: "Enter the actual weight or use the WHO estimate to calculate this dose.",
       alternative: (drug.alternatives && drug.alternatives[0]) || "Check local protocol",
+      alternativeNote: "",
     };
   }
 
@@ -142,6 +187,7 @@ function calculateDrugPlan(drug, options = {}) {
       title: "Enter age to select the band",
       message: "This medicine uses age-band dosing in the starter database.",
       alternative: (drug.alternatives && drug.alternatives[0]) || "Check local protocol",
+      alternativeNote: "",
     };
   }
 
@@ -160,6 +206,7 @@ function calculateDrugPlan(drug, options = {}) {
     dailyMaxText: "--",
     ageBandLabel: "",
     alternative: (drug.alternatives && drug.alternatives[0]) || "Check local protocol",
+    alternativeNote: "",
     unit: "mg",
   };
 
@@ -175,20 +222,21 @@ function calculateDrugPlan(drug, options = {}) {
       ? `Calculated dose capped at the maximum single dose of ${formatNumber(dose.maxSingleMg, 1)} mg.`
       : "";
 
-    const strengthReference = getStrengthReference(selectedStrength);
-    if (strengthReference) {
-      const volumeMl = (cappedDoseMg / strengthReference.concentrationMg) * strengthReference.concentrationMl;
-      plan.volumeText = `${formatNumber(volumeMl, 2)} mL`;
+    const selectedDoseReference = getStrengthReference(selectedStrength);
+    if (selectedDoseReference) {
+      plan.volumeText = formatTabletOrLiquidDose(selectedStrength, cappedDoseMg) || "--";
     }
   } else if (dose.type === "ageBand") {
     const band = findAgeBandDose(drug, ageMonths);
     if (!band) {
+      const ageAlternative = pickAgeSpecificAlternative(drug, ageMonths);
       return {
         blocked: true,
         tone: "danger",
         title: "Not appropriate for this age group",
         message: `${drug.name} has no age-band match for the entered age in this build.`,
-        alternative: (drug.alternatives && drug.alternatives[0]) || "Check local protocol",
+        alternative: ageAlternative?.name || (drug.alternatives && drug.alternatives[0]) || "Check local protocol",
+        alternativeNote: ageAlternative?.note || "",
       };
     }
 
@@ -200,11 +248,7 @@ function calculateDrugPlan(drug, options = {}) {
     if (Number.isFinite(band.amountMg)) {
       plan.doseText = `${formatNumber(band.amountMg, 1)} mg`;
       plan.unit = "mg";
-      const strengthReference = getStrengthReference(selectedStrength);
-      if (strengthReference) {
-        const volumeMl = (band.amountMg / strengthReference.concentrationMg) * strengthReference.concentrationMl;
-        plan.volumeText = `${formatNumber(volumeMl, 2)} mL`;
-      }
+      plan.volumeText = formatTabletOrLiquidDose(selectedStrength, band.amountMg) || "--";
     } else if (Number.isFinite(band.amount)) {
       plan.doseText = `${formatNumber(band.amount, 1)} ${band.unit || "units"}`;
       plan.unit = band.unit || "units";
@@ -228,6 +272,7 @@ function calculateDrugPlan(drug, options = {}) {
         title: "Dose data missing",
         message: `${drug.name} needs a fixed dose value before it can be displayed.`,
         alternative: (drug.alternatives && drug.alternatives[0]) || "Check local protocol",
+        alternativeNote: "",
       };
     }
 
@@ -252,11 +297,16 @@ function getSafetyMessage(drug, ageMonths, weightKg, plan) {
   }
 
   if (plan?.blocked) {
+    const safeMessage = plan.alternativeNote
+      ? `${plan.message} Suggested option: ${plan.alternative}. ${plan.alternativeNote}`
+      : plan.message;
+
     return {
       tone: plan.tone || "warning",
       title: plan.title,
-      message: plan.message,
+      message: safeMessage,
       alternative: plan.alternative,
+      alternativeNote: plan.alternativeNote || "",
     };
   }
 
@@ -269,12 +319,15 @@ function getSafetyMessage(drug, ageMonths, weightKg, plan) {
   }
 
   if (Number.isFinite(ageMonths) && drug.age?.minMonths && ageMonths < drug.age.minMonths) {
-    const alternative = (drug.alternatives && drug.alternatives[0]) || "Check local protocol";
+    const ageAlternative = pickAgeSpecificAlternative(drug, ageMonths);
+    const alternative = ageAlternative?.name || (drug.alternatives && drug.alternatives[0]) || "Check local protocol";
+    const note = ageAlternative?.note || "";
     return {
       tone: "danger",
       title: "Not appropriate for this age group",
-      message: `${drug.name} is below the starter minimum age in this build. Consider ${alternative}.`,
+      message: note ? `${drug.name} is below the starter minimum age in this build. ${note}` : `${drug.name} is below the starter minimum age in this build. Consider ${alternative}.`,
       alternative,
+      alternativeNote: note,
     };
   }
 
