@@ -1,14 +1,15 @@
 const CACHE_NAME = "drzix-pediatrics-v1";
 const ASSETS = [
-  "/",
-  "/index.html",
-  "/css/app.css",
-  "/js/data.js",
-  "/js/engine.js",
-  "/js/app.js",
-  "/manifest.json",
-  "/assets/icon.svg",
-  "/assets/icon-maskable.svg",
+  "./",
+  "./index.html",
+  "./css/app.css",
+  "./js/data.js",
+  "./js/engine.js",
+  "./js/app.js",
+  "./data/drugs.json",
+  "./manifest.json",
+  "./assets/icon.svg",
+  "./assets/icon-maskable.svg",
 ];
 
 self.addEventListener("install", (event) => {
