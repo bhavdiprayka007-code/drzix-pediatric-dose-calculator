@@ -10,7 +10,7 @@ Offline-first pediatric dose calculator for Indian clinicians.
 - PWA
 
 ## Current milestone
-Milestone 1 foundation is now live in the repository.
+Milestone 2 is in progress. The app now has injectable and IV fluid workflows wired into the same Apple-style shell.
 
 ## Completed in this build
 - Apple-style app shell
@@ -18,8 +18,10 @@ Milestone 1 foundation is now live in the repository.
 - Home screen
 - Search screen
 - Drug Dose screen
-- Starter pediatric drug dataset
+- Starter pediatric drug dataset expanded
 - WHO-based weight estimation
+- Injectable workflow shell and calculations
+- IV fluid workflow shell and calculations
 - Dose and safety engine scaffolding
 - PWA manifest and service worker
 - Project operating docs
@@ -27,8 +29,8 @@ Milestone 1 foundation is now live in the repository.
 ## Roadmap
 - Expand pediatric drug database
 - Improve WHO weight coverage
-- Add injectable dose workflows
-- Add IV fluids
+- Validate injectable dose workflows
+- Validate IV fluid calculations
 - Add emergency module
 - Add growth charts and immunization utilities
 
@@ -40,7 +42,6 @@ Milestone 1 foundation is now live in the repository.
 
 ## Pending
 - Replace starter database entries with full validated pediatric coverage
-- Add injectable and IV fluid screens
 - Add stronger age-specific alternative handling
 - Add tests and release hardening
 
