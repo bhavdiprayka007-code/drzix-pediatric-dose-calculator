@@ -14,11 +14,14 @@
 - Add the PWA shell
 - Add project documentation
 - Add injectable and IV fluid screens
+- Add more validated pediatric medicines
+- Add age-aware alternative handling
+- Add engine smoke tests
 
 ## Next
 - Add more validated pediatric drugs
 - Add stronger age-specific alternative handling
-- Add testing around the dose engine
+- Add more automated test coverage
 
 ## Later
 - Emergency module
