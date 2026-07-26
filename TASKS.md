@@ -2,20 +2,23 @@
 
 ## In progress
 - Expand the pediatric drug database
+- Validate injectable dose workflows
+- Validate IV fluid calculations
 - Improve WHO weight coverage
-- Add injectable and IV fluid flows
+- Tighten age-specific alternatives
 
 ## Completed
 - Build the foundation UI
 - Connect the starter pediatric drug database
-- Wire search and dose calculations
+- Wire search and oral dose calculations
 - Add the PWA shell
 - Add project documentation
+- Add injectable and IV fluid screens
 
 ## Next
-- Add more drugs
-- Add stronger age-specific alternatives
-- Add injectable workflows
+- Add more validated pediatric drugs
+- Add stronger age-specific alternative handling
+- Add testing around the dose engine
 
 ## Later
 - Emergency module
