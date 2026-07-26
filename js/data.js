@@ -1,5 +1,5 @@
 window.DRZIX_DATA = {
-  recent: ["Paracetamol", "Amoxicillin", "Ceftriaxone", "Ondansetron"],
+  recent: ["Paracetamol", "Amoxicillin", "Ceftriaxone", "Ondansetron", "Cetirizine"],
   drugs: [
     {
       id: "paracetamol",
@@ -137,6 +137,116 @@ window.DRZIX_DATA = {
       warnings: ["Neonatal use requires strict protocol review."],
       alternatives: ["Cefotaxime"],
       status: "Needs review",
+    },
+    {
+      id: "cetirizine",
+      name: "Cetirizine",
+      aliases: [],
+      category: "Allergy",
+      indications: ["Allergic rhinitis", "Urticaria", "Itching"],
+      route: "PO",
+      age: {
+        minMonths: 12,
+        note: "Use age-band dosing for young children.",
+      },
+      dose: {
+        type: "ageBand",
+        bands: [
+          { minMonths: 12, maxMonths: 23, label: "12 to 23 months", amountMg: 2.5, frequency: "Once daily", duration: "As needed" },
+          { minMonths: 24, maxMonths: 59, label: "2 to 5 years", amountMg: 2.5, frequency: "Twice daily", duration: "As needed" },
+          { minMonths: 60, maxMonths: 143, label: "6 to 11 years", amountMg: 5, frequency: "Twice daily", duration: "As needed" },
+          { minMonths: 144, maxMonths: null, label: "12 years and above", amountMg: 10, frequency: "Once daily", duration: "As needed" },
+        ],
+        frequency: "Age dependent",
+        duration: "As needed",
+      },
+      strengths: [
+        { label: "5 mg/5 mL syrup", concentrationMg: 5, concentrationMl: 5, form: "Syrup" },
+        { label: "10 mg tablet", concentrationMg: 10, concentrationMl: 1, form: "Tablet" },
+      ],
+      warnings: ["Age-band dosing only. Check sleepiness and local protocol."],
+      alternatives: ["Loratadine"],
+      status: "Verified",
+    },
+    {
+      id: "zinc",
+      name: "Zinc",
+      aliases: [],
+      category: "Diarrhea support",
+      indications: ["Acute diarrhea"],
+      route: "PO",
+      age: {
+        minMonths: 0,
+        note: "Age-band dosing for diarrhea support in children.",
+      },
+      dose: {
+        type: "ageBand",
+        bands: [
+          { minMonths: 0, maxMonths: 5, label: "Under 6 months", amountMg: 10, frequency: "Once daily", duration: "10 to 14 days" },
+          { minMonths: 6, maxMonths: null, label: "6 months and above", amountMg: 20, frequency: "Once daily", duration: "10 to 14 days" },
+        ],
+        frequency: "Once daily",
+        duration: "10 to 14 days",
+      },
+      strengths: [
+        { label: "10 mg syrup", concentrationMg: 10, concentrationMl: 5, form: "Syrup" },
+        { label: "20 mg tablet", concentrationMg: 20, concentrationMl: 1, form: "Tablet" },
+      ],
+      warnings: ["Used with oral rehydration and continued feeding."],
+      alternatives: ["ORS"],
+      status: "Verified",
+    },
+    {
+      id: "amikacin",
+      name: "Amikacin",
+      aliases: [],
+      category: "Injection antibiotic",
+      indications: ["Sepsis", "Serious gram-negative infection"],
+      route: "IV/IM",
+      age: {
+        minMonths: 1,
+        note: "Injectable dose requires renal monitoring and local protocol review.",
+      },
+      dose: {
+        type: "perKg",
+        amountMgPerKg: 15,
+        maxSingleMg: 1500,
+        maxDailyMgPerKg: 15,
+        frequency: "Once daily",
+        duration: "As clinically required",
+      },
+      strengths: [
+        { label: "100 mg/2 mL vial", concentrationMg: 100, concentrationMl: 2, form: "Vial" },
+        { label: "500 mg/2 mL vial", concentrationMg: 500, concentrationMl: 2, form: "Vial" },
+      ],
+      warnings: ["Monitor renal function and hearing according to protocol."],
+      alternatives: ["Gentamicin"],
+      status: "Needs review",
+    },
+    {
+      id: "salbutamol",
+      name: "Salbutamol",
+      aliases: ["Albuterol"],
+      category: "Respiratory",
+      indications: ["Wheeze", "Bronchospasm", "Asthma relief"],
+      route: "Inhaled",
+      age: {
+        minMonths: 6,
+        note: "Use age-appropriate inhaler or nebulization technique.",
+      },
+      dose: {
+        type: "fixed",
+        amount: 2,
+        unit: "puffs",
+        frequency: "Every 4 to 6 hours as needed",
+        duration: "As needed",
+      },
+      strengths: [
+        { label: "100 mcg/puff inhaler", concentrationMg: 0.1, concentrationMl: 1, form: "Inhaler" },
+      ],
+      warnings: ["Confirm inhaler technique and spacer use when available."],
+      alternatives: ["Nebulized salbutamol"],
+      status: "Verified",
     },
   ],
   whoWeight: [
