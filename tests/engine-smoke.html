@@ -1,0 +1,146 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Drzix Engine Smoke Test</title>
+    <style>
+      :root {
+        color-scheme: light;
+        --bg: #f4f8ff;
+        --card: #ffffff;
+        --text: #10233e;
+        --muted: #5a6d89;
+        --good: #1e9e65;
+        --bad: #d64545;
+        --border: rgba(16, 35, 62, 0.1);
+        font-family: system-ui, sans-serif;
+      }
+      body {
+        margin: 0;
+        padding: 24px;
+        background: var(--bg);
+        color: var(--text);
+      }
+      main {
+        max-width: 960px;
+        margin: 0 auto;
+      }
+      .card {
+        background: var(--card);
+        border: 1px solid var(--border);
+        border-radius: 20px;
+        padding: 18px;
+        box-shadow: 0 16px 40px rgba(20, 55, 100, 0.08);
+      }
+      .row {
+        display: flex;
+        gap: 10px;
+        align-items: center;
+        justify-content: space-between;
+        padding: 10px 0;
+        border-bottom: 1px solid var(--border);
+      }
+      .row:last-child {
+        border-bottom: 0;
+      }
+      .pass {
+        color: var(--good);
+        font-weight: 700;
+      }
+      .fail {
+        color: var(--bad);
+        font-weight: 700;
+      }
+      code {
+        background: rgba(16, 35, 62, 0.06);
+        padding: 0 6px;
+        border-radius: 6px;
+      }
+      .muted {
+        color: var(--muted);
+      }
+    </style>
+  </head>
+  <body>
+    <main>
+      <h1>Drzix Engine Smoke Test</h1>
+      <p class="muted">Quick browser checks for dose, age safety, and fluid calculations.</p>
+      <div class="card" id="results">Loading tests…</div>
+    </main>
+
+    <script src="../js/data.js"></script>
+    <script src="../js/engine.js"></script>
+    <script>
+      const results = [];
+
+      function expect(name, condition, details) {
+        results.push({ name, passed: Boolean(condition), details });
+      }
+
+      function findDrugById(id) {
+        return window.DRZIX_DATA.drugs.find((drug) => drug.id === id);
+      }
+
+      const paracetamol = findDrugById("paracetamol");
+      const paracetamolPlan = calculateDrugPlan(paracetamol, {
+        ageMonths: 24,
+        weightKg: 12,
+        selectedStrength: paracetamol.strengths[1],
+      });
+      expect("Paracetamol dose", paracetamolPlan.doseText === "180 mg", paracetamolPlan);
+      expect("Paracetamol volume", paracetamolPlan.volumeText === "3.60 mL", paracetamolPlan);
+
+      const ibuprofen = findDrugById("ibuprofen");
+      const ibuprofenPlan = calculateDrugPlan(ibuprofen, {
+        ageMonths: 5,
+        weightKg: 8,
+        selectedStrength: ibuprofen.strengths[0],
+      });
+      expect("Ibuprofen age block", ibuprofenPlan.blocked === true, ibuprofenPlan);
+      expect("Ibuprofen alternative", ibuprofenPlan.alternative === "Paracetamol", ibuprofenPlan);
+
+      const cetirizine = findDrugById("cetirizine");
+      const cetirizinePlan = calculateDrugPlan(cetirizine, {
+        ageMonths: 18,
+        weightKg: 10,
+        selectedStrength: cetirizine.strengths[0],
+      });
+      expect("Cetirizine band", cetirizinePlan.ageBandLabel === "12 to 23 months", cetirizinePlan);
+      expect("Cetirizine dose", cetirizinePlan.doseText === "2.5 mg", cetirizinePlan);
+
+      const dexamethasone = findDrugById("dexamethasone");
+      const dexamethasonePlan = calculateDrugPlan(dexamethasone, {
+        ageMonths: 24,
+        weightKg: 15,
+        selectedStrength: dexamethasone.strengths[1],
+      });
+      expect("Dexamethasone dose", dexamethasonePlan.doseText === "2.25 mg", dexamethasonePlan);
+      expect("Dexamethasone tablet count", dexamethasonePlan.volumeText === "0.56 tablets", dexamethasonePlan);
+
+      const fluidPlan = calculateFluidPlan(20);
+      expect("Maintenance fluid", fluidPlan.maintenanceDailyMl === 1500, fluidPlan);
+      expect("Hourly fluid", fluidPlan.hourlyMl === 62.5, fluidPlan);
+
+      const allPassed = results.every((entry) => entry.passed);
+      const container = document.getElementById("results");
+
+      container.innerHTML = `
+        <div class="row ${allPassed ? "pass" : "fail"}">
+          <span>Overall</span>
+          <span>${allPassed ? "PASS" : "FAIL"}</span>
+        </div>
+        ${results
+          .map(
+            (entry) => `
+              <div class="row ${entry.passed ? "pass" : "fail"}">
+                <span>${entry.name}</span>
+                <span>${entry.passed ? "PASS" : "FAIL"}</span>
+              </div>
+            `,
+          )
+          .join("")}
+      `;
+    </script>
+  </body>
+</html>
