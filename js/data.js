@@ -1,5 +1,5 @@
 window.DRZIX_DATA = {
-  recent: ["Paracetamol", "Amoxicillin", "Ceftriaxone", "Ondansetron", "Cetirizine"],
+  recent: ["Paracetamol", "Amoxicillin", "Ceftriaxone", "Ondansetron", "Cetirizine", "Dexamethasone"],
   drugs: [
     {
       id: "paracetamol",
@@ -11,6 +11,9 @@ window.DRZIX_DATA = {
       age: {
         minMonths: 2,
         note: "Suitable from 2 months onward in this starter database.",
+        alternativesByAge: [
+          { maxMonths: 1, name: "Clinical review", note: "Newborn fever or pain needs specialist review." },
+        ],
       },
       dose: {
         type: "perKg",
@@ -66,6 +69,9 @@ window.DRZIX_DATA = {
       age: {
         minMonths: 6,
         note: "Avoid under 6 months in this starter database.",
+        alternativesByAge: [
+          { maxMonths: 5, name: "Paracetamol", note: "Use paracetamol instead of ibuprofen below 6 months." },
+        ],
       },
       dose: {
         type: "perKg",
@@ -93,6 +99,9 @@ window.DRZIX_DATA = {
       age: {
         minMonths: 6,
         note: "Use for selected pediatric vomiting scenarios only.",
+        alternativesByAge: [
+          { maxMonths: 5, name: "Oral rehydration solution", note: "Below 6 months, start with ORS and clinical review." },
+        ],
       },
       dose: {
         type: "perKg",
@@ -120,6 +129,9 @@ window.DRZIX_DATA = {
       age: {
         minMonths: 1,
         note: "Use with neonatal caution and local protocols.",
+        alternativesByAge: [
+          { maxMonths: 0, name: "Cefotaxime", note: "Neonatal review and local protocol are required." },
+        ],
       },
       dose: {
         type: "perKg",
@@ -148,6 +160,9 @@ window.DRZIX_DATA = {
       age: {
         minMonths: 12,
         note: "Use age-band dosing for young children.",
+        alternativesByAge: [
+          { maxMonths: 11, name: "Clinical review", note: "Cetirizine liquid is prescribed from 1 year; younger infants need clinician review." },
+        ],
       },
       dose: {
         type: "ageBand",
@@ -206,6 +221,9 @@ window.DRZIX_DATA = {
       age: {
         minMonths: 1,
         note: "Injectable dose requires renal monitoring and local protocol review.",
+        alternativesByAge: [
+          { maxMonths: 0, name: "Gentamicin", note: "Use protocol-based neonatal aminoglycoside choice." },
+        ],
       },
       dose: {
         type: "perKg",
@@ -233,11 +251,15 @@ window.DRZIX_DATA = {
       age: {
         minMonths: 6,
         note: "Use age-appropriate inhaler or nebulization technique.",
+        alternativesByAge: [
+          { maxMonths: 5, name: "Clinical review", note: "Young infants need clinician assessment before inhaled salbutamol." },
+        ],
       },
       dose: {
         type: "fixed",
         amount: 2,
         unit: "puffs",
+        note: "Use 1 or 2 puffs when needed; maximum 4 times in 24 hours.",
         frequency: "Every 4 to 6 hours as needed",
         duration: "As needed",
       },
@@ -246,6 +268,88 @@ window.DRZIX_DATA = {
       ],
       warnings: ["Confirm inhaler technique and spacer use when available."],
       alternatives: ["Nebulized salbutamol"],
+      status: "Verified",
+    },
+    {
+      id: "prednisolone",
+      name: "Prednisolone",
+      aliases: [],
+      category: "Steroid",
+      indications: ["Croup", "Sore throat", "Inflammatory conditions"],
+      route: "PO",
+      age: {
+        minMonths: 0,
+        note: "Use indication-specific pediatric dosing and tapering only when needed.",
+      },
+      dose: {
+        type: "perKg",
+        amountMgPerKg: 1,
+        maxSingleMg: 50,
+        maxDailyMgPerKg: 1,
+        frequency: "Single dose or as directed",
+        duration: "Single dose or short course",
+      },
+      strengths: [
+        { label: "1 mg/mL liquid", concentrationMg: 1, concentrationMl: 1, form: "Liquid" },
+        { label: "10 mg/mL liquid", concentrationMg: 10, concentrationMl: 1, form: "Liquid" },
+        { label: "5 mg tablet", concentrationMg: 5, concentrationMl: 1, form: "Tablet" },
+      ],
+      warnings: ["Follow local tapering guidance if a longer course is prescribed."],
+      alternatives: ["Dexamethasone"],
+      status: "Verified",
+    },
+    {
+      id: "dexamethasone",
+      name: "Dexamethasone",
+      aliases: [],
+      category: "Steroid",
+      indications: ["Croup", "Severe sore throat", "Wheeze"],
+      route: "PO/IV/IM",
+      age: {
+        minMonths: 0,
+        note: "Use indication-specific pediatric dosing and follow local airway guidance.",
+      },
+      dose: {
+        type: "perKg",
+        amountMgPerKg: 0.15,
+        maxSingleMg: 10,
+        maxDailyMgPerKg: 0.15,
+        frequency: "Single dose",
+        duration: "Single dose",
+      },
+      strengths: [
+        { label: "0.5 mg tablet", concentrationMg: 0.5, concentrationMl: 1, form: "Tablet" },
+        { label: "4 mg tablet", concentrationMg: 4, concentrationMl: 1, form: "Tablet" },
+        { label: "8 mg tablet", concentrationMg: 8, concentrationMl: 1, form: "Tablet" },
+      ],
+      warnings: ["Use as a single-dose steroid option for croup-type presentations when indicated."],
+      alternatives: ["Prednisolone"],
+      status: "Verified",
+    },
+    {
+      id: "oral_rehydration_salts",
+      name: "Oral Rehydration Salts",
+      aliases: ["ORS", "Dioralyte"],
+      category: "Diarrhea support",
+      indications: ["Diarrhea", "Dehydration"],
+      route: "PO",
+      age: {
+        minMonths: 0,
+        note: "Use with small frequent sips and local packet directions.",
+      },
+      dose: {
+        type: "fixed",
+        amount: 1,
+        unit: "packet",
+        note: "Prepare according to the packet and give frequent small sips.",
+        frequency: "Throughout the day",
+        duration: "As needed",
+      },
+      strengths: [
+        { label: "ORS sachet", concentrationMg: 1, concentrationMl: 1, form: "Sachet" },
+      ],
+      warnings: ["Continue feeding and seek care if the child cannot drink or is getting worse."],
+      alternatives: ["Continue feeding"],
       status: "Verified",
     },
   ],
