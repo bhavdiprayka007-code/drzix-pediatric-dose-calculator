@@ -160,6 +160,16 @@ h3 {
   background: rgba(30, 158, 101, 0.12);
 }
 
+.status-badge.warning {
+  color: var(--warning);
+  background: rgba(201, 140, 16, 0.14);
+}
+
+.status-badge.danger {
+  color: var(--danger);
+  background: rgba(214, 69, 69, 0.12);
+}
+
 .search-box {
   display: grid;
   gap: 8px;
@@ -263,9 +273,11 @@ label span {
   gap: 10px;
 }
 
-.chip {
+.chip,
+.chip-button {
   display: inline-flex;
   align-items: center;
+  justify-content: center;
   gap: 8px;
   border: 1px solid rgba(16, 35, 62, 0.1);
   border-radius: 999px;
@@ -274,11 +286,23 @@ label span {
   color: var(--text);
 }
 
-.chip button {
+.chip button,
+.chip-button {
   border: 0;
-  background: transparent;
-  color: inherit;
-  padding: 0;
+  font: inherit;
+}
+
+.chip-button {
+  cursor: pointer;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease, background 0.2s ease;
+}
+
+.chip-button.active {
+  border-color: rgba(22, 119, 255, 0.36);
+  box-shadow: 0 10px 20px rgba(22, 119, 255, 0.1);
+  transform: translateY(-1px);
+  background: rgba(22, 119, 255, 0.08);
+  color: var(--primary-strong);
 }
 
 .summary {
@@ -352,6 +376,11 @@ label span {
   border: 1px solid rgba(22, 119, 255, 0.15);
   background: linear-gradient(180deg, rgba(22, 119, 255, 0.1), rgba(22, 119, 255, 0.05));
   color: var(--text);
+}
+
+.info-panel .metric {
+  display: block;
+  margin: 8px 0 6px;
 }
 
 .strength-picker {
