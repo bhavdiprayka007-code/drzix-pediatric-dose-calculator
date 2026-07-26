@@ -124,7 +124,7 @@
               </label>
             </div>
 
-            <div class="info-panel" id="estimatedWeightPanel"></div>
+            <div id="estimatedWeightPanel" class="info-panel"></div>
 
             <div class="strength-picker" id="strengthPicker"></div>
           </div>
@@ -143,17 +143,101 @@
 
         <section class="screen" data-screen="injectables">
           <div class="card section-card">
-            <p class="section-label">Injectables</p>
-            <h3>Coming next in Milestone 2</h3>
-            <p class="muted">The foundation is ready for injectable dose logic and vial-based calculations.</p>
+            <div class="section-header">
+              <div>
+                <p class="section-label">Injectables</p>
+                <h3 id="injectableName">Select an injectable</h3>
+              </div>
+              <span class="status-badge" id="injectableStatus">Needs review</span>
+            </div>
+
+            <div class="chip-row" id="injectableDrugChips"></div>
+            <div id="injectableIndications" class="chip-row"></div>
+
+            <div class="input-grid">
+              <label>
+                <span>Years</span>
+                <input id="injectableYearsInput" type="number" min="0" step="1" inputmode="numeric" placeholder="2" />
+              </label>
+              <label>
+                <span>Months</span>
+                <input id="injectableMonthsInput" type="number" min="0" max="11" step="1" inputmode="numeric" placeholder="6" />
+              </label>
+            </div>
+
+            <label class="checkbox-row">
+              <input id="injectableActualWeightToggle" type="checkbox" />
+              <span>I know the actual weight</span>
+            </label>
+
+            <div id="injectableActualWeightBlock" class="input-grid hidden">
+              <label>
+                <span>Weight in kg</span>
+                <input id="injectableActualWeightInput" type="number" min="0" step="0.1" inputmode="decimal" placeholder="12.5" />
+              </label>
+            </div>
+
+            <div id="injectableEstimatedWeightPanel" class="info-panel"></div>
+
+            <div class="strength-picker" id="injectableStrengthPicker"></div>
+          </div>
+
+          <div class="card section-card result-card">
+            <div class="section-header">
+              <div>
+                <p class="section-label">Injection result</p>
+                <h3 id="injectableDoseTitle">Waiting for inputs</h3>
+              </div>
+            </div>
+            <div id="injectableDoseOutput" class="dose-output"></div>
+            <div id="injectableSafetyOutput" class="warning-stack"></div>
           </div>
         </section>
 
         <section class="screen" data-screen="fluids">
           <div class="card section-card">
-            <p class="section-label">IV fluids</p>
-            <h3>Coming next in Milestone 2</h3>
-            <p class="muted">Maintenance, bolus, and fluid correction calculators will plug into the same engine.</p>
+            <div class="section-header">
+              <div>
+                <p class="section-label">IV fluids</p>
+                <h3>Maintenance and bolus planner</h3>
+              </div>
+            </div>
+
+            <div class="input-grid">
+              <label>
+                <span>Years</span>
+                <input id="fluidYearsInput" type="number" min="0" step="1" inputmode="numeric" placeholder="2" />
+              </label>
+              <label>
+                <span>Months</span>
+                <input id="fluidMonthsInput" type="number" min="0" max="11" step="1" inputmode="numeric" placeholder="6" />
+              </label>
+            </div>
+
+            <label class="checkbox-row">
+              <input id="fluidActualWeightToggle" type="checkbox" />
+              <span>I know the actual weight</span>
+            </label>
+
+            <div id="fluidActualWeightBlock" class="input-grid hidden">
+              <label>
+                <span>Weight in kg</span>
+                <input id="fluidActualWeightInput" type="number" min="0" step="0.1" inputmode="decimal" placeholder="12.5" />
+              </label>
+            </div>
+
+            <div id="fluidEstimatedWeightPanel" class="info-panel"></div>
+          </div>
+
+          <div class="card section-card result-card">
+            <div class="section-header">
+              <div>
+                <p class="section-label">Fluid result</p>
+                <h3 id="fluidTitle">Maintenance fluid plan</h3>
+              </div>
+            </div>
+            <div id="fluidOutput" class="dose-output"></div>
+            <div id="fluidSafetyOutput" class="warning-stack"></div>
           </div>
         </section>
 
@@ -178,8 +262,8 @@
         <button class="nav-item active" data-screen-target="home" type="button">Home</button>
         <button class="nav-item" data-screen-target="search" type="button">Search</button>
         <button class="nav-item" data-screen-target="drug-dose" type="button">Drug Dose</button>
-        <button class="nav-item" data-screen-target="growth" type="button">Growth</button>
-        <button class="nav-item" data-screen-target="settings" type="button">Settings</button>
+        <button class="nav-item" data-screen-target="injectables" type="button">Injectables</button>
+        <button class="nav-item" data-screen-target="fluids" type="button">Fluids</button>
       </nav>
     </div>
 
