@@ -283,7 +283,7 @@ function renderStrengthButtons(container, strengths, selectedIndex, onSelect) {
   `;
 
   container.querySelectorAll("[data-strength-index]").forEach((button) => {
-    button.addEventListener("click", () => onSelect(Number(button.dataset.strength-index)));
+    button.addEventListener("click", () => onSelect(Number(button.dataset.strengthIndex)));
   });
 }
 
